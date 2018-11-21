@@ -25,6 +25,10 @@ var renderCloud = function (ctx, x, y, color) {
 };
 
 window.renderStatistics = function (ctx, names, times) {
+  var names = ['qwer', 'Вы', 'cvb', 'dfg'];
+  var times = [];
+
+
   renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
 
@@ -46,17 +50,19 @@ window.renderStatistics = function (ctx, names, times) {
   };
 
   // Проверка на соответствие длин масивов для имен игроков и результата игры
-  if (names.length > times.length) {
-    var lengthDifference = names.length - times.length;
-    for (var i = 0; i < lengthDifference; i++) {
-      times.splice(times.length, 0, 0);
+  var checkArrays = function (arr1, arr2) {
+    var lengthDifference = arr1.length - arr2.length;
+    if (lengthDifference > 0) {
+      for (var i = 0; i < lengthDifference; i++) {
+        arr2.push(0);
+      }
     }
-  } else {
-    lengthDifference = times.length - names.length;
-    times.splice(times.length - lengthDifference, lengthDifference);
-  }
+  };
 
-  for (i = 0; i < names.length; i++) {
+  checkArrays(names, times);
+
+  for (var i = 0; i < names.length; i++) {
+    console.log(times[i]);
     ctx.fillStyle = '#000';
     ctx.fillText(Math.round(times[i]), CLOUD_X + LEFT_GAP + (BAR_WIGHT + BAR_GAP) * i, CLOUD_Y + GAP + FONT_GAP * 3.5 + (BAR_HEIGHT - BAR_HEIGHT * times[i] / getMaxTime(times)), TEXT_WIDTH);
     ctx.fillText(names[i], CLOUD_X + LEFT_GAP + (BAR_WIGHT + BAR_GAP) * i, CLOUD_Y + GAP + BAR_HEIGHT + FONT_GAP * 5, TEXT_WIDTH);

@@ -9,7 +9,7 @@ var FONT_GAP = 16;
 var LEFT_GAP = 30;
 var TEXT_WIDTH = 50;
 var BAR_HEIGHT = 150;
-var BAR_WIGHT = 40;
+var BAR_WIDTH = 40;
 var BAR_GAP = 50;
 
 var leftCloudField = CLOUD_X + LEFT_GAP;
@@ -50,24 +50,34 @@ var getMaxElement = function (arr) {
   return maxElement;
 };
 
+var getFillStyle = function (str) {
+  if (str === 'Вы') {
+    return 'rgba(255, 0, 0, 1)';
+  }
+
+  return 'rgba(0, 0, ' + (Math.floor(Math.random() * (255 - 55 + 1)) + 55) + ', ' + (Math.random() * (1 - 0.5) + 0.5) + ')';
+};
+
+var getBarRelativeHeight = function (value, maxValue) {
+  if (maxValue === 0) {
+    return 0;
+  }
+  return BAR_HEIGHT * value / maxValue;
+};
+
+var drawBar = function (ctx, time, name, xPos, yPos, barHeight) {
+  // Отрисовка текста
+  ctx.fillStyle = '#000';
+  ctx.fillText(Math.round(time), xPos, upCloudField + FONT_GAP * 3.5 + yPos, TEXT_WIDTH);
+  ctx.fillText(name, xPos, upCloudField + BAR_HEIGHT + FONT_GAP * 5, TEXT_WIDTH);
+
+  // Отрисовка баров
+  ctx.fillStyle = getFillStyle(name);
+  ctx.fillRect(xPos, upCloudField + FONT_GAP * 4 + yPos, BAR_WIDTH, barHeight);
+};
+
 window.renderStatistics = function (ctx, names, times) {
   var maxTime = getMaxElement(times);
-
-  var getFillStyle = function (str) {
-    if (str === 'Вы') {
-      return 'rgba(255, 0, 0, 1)';
-    }
-
-    return 'rgba(0, 0, ' + (Math.floor(Math.random() * (255 - 55 + 1)) + 55) + ', ' + (Math.random() * (1 - 0.5) + 0.5) + ')';
-  };
-
-  var getBarRelativeHeight = function (value, maxValue) {
-    if (maxValue === 0) {
-      return 0;
-    }
-    return BAR_HEIGHT * value / maxValue;
-  };
-
   checkArrays(names, times);
   renderCloud(ctx, CLOUD_X + GAP, upCloudField, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
@@ -78,18 +88,11 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillText('Список результатов:', leftCloudField, upCloudField + FONT_GAP * 2);
 
   for (var i = 0; i < names.length; i++) {
-    var gapBetweenBars = (BAR_WIGHT + BAR_GAP) * i;
+    var gapBetweenBars = (BAR_WIDTH + BAR_GAP) * i;
     var barXStartPosition = leftCloudField + gapBetweenBars;
     var barHeightRelative = getBarRelativeHeight(times[i], maxTime);
     var barYStartPosition = BAR_HEIGHT - barHeightRelative;
 
-    // Отрисовка текста
-    ctx.fillStyle = '#000';
-    ctx.fillText(Math.round(times[i]), barXStartPosition, upCloudField + FONT_GAP * 3.5 + barYStartPosition, TEXT_WIDTH);
-    ctx.fillText(names[i], barXStartPosition, upCloudField + BAR_HEIGHT + FONT_GAP * 5, TEXT_WIDTH);
-
-    // Отрисовка баров
-    ctx.fillStyle = getFillStyle(names[i]);
-    ctx.fillRect(barXStartPosition, upCloudField + FONT_GAP * 4 + barYStartPosition, BAR_WIGHT, barHeightRelative);
+    drawBar(ctx, times[i], names[i], barXStartPosition, barYStartPosition, barHeightRelative);
   }
 };

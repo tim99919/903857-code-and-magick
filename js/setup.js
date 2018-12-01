@@ -68,17 +68,17 @@ var onUserDialogEscPress = function (evt) {
 var showUserDialog = function () {
   userDialog.classList.remove('hidden');
   document.addEventListener('keydown', onUserDialogEscPress);
-  userWizardCoat.addEventListener('click', changeWizardCoatColor);
-  userWizardEyes.addEventListener('click', changeWizardEyesColor);
-  userFireball.addEventListener('click', changeFireballColor);
+  userWizardCoat.addEventListener('click', onWizardCoatClick);
+  userWizardEyes.addEventListener('click', onWizardEyesClick);
+  userFireball.addEventListener('click', onFireballClick);
 };
 
 var hideUserDialog = function () {
   userDialog.classList.add('hidden');
   document.removeEventListener('keydown', onUserDialogEscPress);
-  userWizardCoat.removeEventListener('click', changeWizardCoatColor);
-  userWizardEyes.removeEventListener('click', changeWizardEyesColor);
-  userFireball.removeEventListener('click', changeFireballColor);
+  userWizardCoat.removeEventListener('click', onWizardCoatClick);
+  userWizardEyes.removeEventListener('click', onWizardEyesClick);
+  userFireball.removeEventListener('click', onFireballClick);
 };
 
 var getRandInt = function (min, max) {
@@ -134,35 +134,45 @@ var showSetupDialog = function () {
   setupDialog.classList.remove('hidden');
 };
 
-var changeWizardCoatColor = function () {
-  var newColor = getRandElement(WIZARD_COATCOLORS);
-  userWizardCoat.style.fill = newColor;
-  inputCoatColor.value = newColor;
+var setFillColor = function (element, input, colors) {
+  var newColor = getRandElement(colors);
+  element.style.fill = newColor;
+  input.value = newColor;
 };
 
-var changeWizardEyesColor = function () {
-  var newColor = getRandElement(WIZARD_EYECOLORS);
-  userWizardEyes.style.fill = newColor;
-  inputEyesColor.value = newColor;
+var setBackgroudColor = function (element, input, colors) {
+  var newColor = getRandElement(colors);
+  element.style.background = newColor;
+  input.value = newColor;
 };
 
-var changeFireballColor = function () {
-  var newColor = getRandElement(WIZARD_FIREBALL_COLORS);
-  userFireball.style.background = newColor;
-  inputFireballColor.value = newColor;
+var onWizardCoatClick = function () {
+  setFillColor(userWizardCoat, inputCoatColor, WIZARD_COATCOLORS);
+};
+
+var onWizardEyesClick = function () {
+  setFillColor(userWizardEyes, inputEyesColor, WIZARD_EYECOLORS);
+};
+
+var onFireballClick = function () {
+  setBackgroudColor(userFireball, inputFireballColor, WIZARD_FIREBALL_COLORS);
 };
 
 showSimilarWizards();
 showSetupDialog();
 
-userDialogOpen.addEventListener('click', showUserDialog);
+userDialogOpen.addEventListener('click', function () {
+  showUserDialog();
+});
 userDialogOpen.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     showUserDialog();
   }
 });
 
-userDialogClose.addEventListener('click', hideUserDialog);
+userDialogClose.addEventListener('click', function () {
+  hideUserDialog();
+});
 userDialogClose.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     hideUserDialog();

@@ -60,6 +60,7 @@ var inputEyesColor = userInputs[3];
 var inputFireballColor = userInputs[4];
 
 var onUserDialogEscPress = function (evt) {
+  evt.preventDefault();
   if (evt.keyCode === ESC_KEYCODE) {
     hideUserDialog();
   }
@@ -175,9 +176,7 @@ var setBackgroudColor = function (element, input, colors) {
 showSimilarWizards();
 showSetupDialog();
 
-userDialogOpen.addEventListener('click', function () {
-  showUserDialog();
-});
+userDialogOpen.addEventListener('click', showUserDialog);
 userDialogOpen.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     showUserDialog();

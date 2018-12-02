@@ -65,9 +65,33 @@ var onUserDialogEscPress = function (evt) {
   }
 };
 
+var onUserDialogCloseClick = function () {
+  hideUserDialog();
+};
+
+var onUserDialogCloseEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    hideUserDialog();
+  }
+};
+
+var onWizardCoatClick = function () {
+  setFillColor(userWizardCoat, inputCoatColor, WIZARD_COATCOLORS);
+};
+
+var onWizardEyesClick = function () {
+  setFillColor(userWizardEyes, inputEyesColor, WIZARD_EYECOLORS);
+};
+
+var onFireballClick = function () {
+  setBackgroudColor(userFireball, inputFireballColor, WIZARD_FIREBALL_COLORS);
+};
+
 var showUserDialog = function () {
   userDialog.classList.remove('hidden');
   document.addEventListener('keydown', onUserDialogEscPress);
+  userDialogClose.addEventListener('click', onUserDialogCloseClick);
+  userDialogClose.addEventListener('keydown', onUserDialogCloseEnterPress);
   userWizardCoat.addEventListener('click', onWizardCoatClick);
   userWizardEyes.addEventListener('click', onWizardEyesClick);
   userFireball.addEventListener('click', onFireballClick);
@@ -76,6 +100,8 @@ var showUserDialog = function () {
 var hideUserDialog = function () {
   userDialog.classList.add('hidden');
   document.removeEventListener('keydown', onUserDialogEscPress);
+  userDialogClose.removeEventListener('click', onUserDialogCloseClick);
+  userDialogClose.removeEventListener('keydown', onUserDialogCloseEnterPress);
   userWizardCoat.removeEventListener('click', onWizardCoatClick);
   userWizardEyes.removeEventListener('click', onWizardEyesClick);
   userFireball.removeEventListener('click', onFireballClick);
@@ -146,18 +172,6 @@ var setBackgroudColor = function (element, input, colors) {
   input.value = newColor;
 };
 
-var onWizardCoatClick = function () {
-  setFillColor(userWizardCoat, inputCoatColor, WIZARD_COATCOLORS);
-};
-
-var onWizardEyesClick = function () {
-  setFillColor(userWizardEyes, inputEyesColor, WIZARD_EYECOLORS);
-};
-
-var onFireballClick = function () {
-  setBackgroudColor(userFireball, inputFireballColor, WIZARD_FIREBALL_COLORS);
-};
-
 showSimilarWizards();
 showSetupDialog();
 
@@ -167,14 +181,5 @@ userDialogOpen.addEventListener('click', function () {
 userDialogOpen.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     showUserDialog();
-  }
-});
-
-userDialogClose.addEventListener('click', function () {
-  hideUserDialog();
-});
-userDialogClose.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === ENTER_KEYCODE) {
-    hideUserDialog();
   }
 });

@@ -60,8 +60,8 @@ var inputEyesColor = userInputs[3];
 var inputFireballColor = userInputs[4];
 
 var onUserDialogEscPress = function (evt) {
-  evt.preventDefault();
   if (evt.keyCode === ESC_KEYCODE) {
+    evt.preventDefault();
     hideUserDialog();
   }
 };
